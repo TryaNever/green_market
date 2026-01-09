@@ -19,7 +19,7 @@ export default function ProductCard({ post }) {
         <h3 className="text-sm sm:text-base">{post.title}</h3>
         <p className="mb-2 text-sm sm:text-base">{post.price} €</p>
         <a
-          href="#"
+          href={`/products/${post.id}`}
           className="rounded-2xl bg-[#E0789D] px-4 py-1 text-[#660024] font-bold text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-white/50"
         >
           Voir le produit

@@ -2,7 +2,7 @@ import ProductContainer from "../components/ProductContainer";
 import Footer from "../components/Footer";
 import { NavSearch } from "../components/NavSearch";
 import MenuBurger from "../components/MenuBurger";
-
+import eco from "../assets/eco.webp";
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden bg-[#E0789D] relative">
@@ -22,7 +22,7 @@ export default function Home() {
           </div>
 
           <img
-            src="public/img/eco.webp"
+            src={eco}
             alt="Image décorative illustrant Green Market"
             loading="lazy"
             width={144}
@@ -62,7 +62,7 @@ export default function Home() {
                 Sweet
               </h3>
               <img
-                src="/public/img/eco.webp"
+                src={eco}
                 loading="lazy"
                 width={144}
                 height={144}
@@ -75,7 +75,7 @@ export default function Home() {
                 Sweet
               </h3>
               <img
-                src="/public/img/eco.webp"
+                src={eco}
                 loading="lazy"
                 width={144}
                 height={144}
@@ -88,7 +88,7 @@ export default function Home() {
                 Sweet
               </h3>
               <img
-                src="/public/img/eco.webp"
+                src={eco}
                 loading="lazy"
                 width={144}
                 height={144}
@@ -101,7 +101,7 @@ export default function Home() {
                 Sweet
               </h3>
               <img
-                src="/public/img/eco.webp"
+                src={eco}
                 loading="lazy"
                 width={144}
                 height={144}

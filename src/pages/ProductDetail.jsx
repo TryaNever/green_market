@@ -19,7 +19,6 @@ export default function ProductDetail() {
           throw new Error("Erreur lors du chargement des produits");
         const res = await response.json();
         setPost(res);
-        console.log(res);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -53,40 +52,59 @@ export default function ProductDetail() {
       </header>
 
       <main className="mb-5 px-10 sm:px-20 lg:flex xl:mt-10 justify-between 2xl:px-40">
-        <div className=" mt-5 lg:w-1/2">
-          <div className="flex flex-col items-center gap-4">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="w-full px-[20%] sm:px-40 md:px-60 lg:px-40"
-              loading="lazy"
-            />
-            <h2 className="text-4xl font-semibold text-center text-[#660024]">
-              {post.title}
-            </h2>
-            <p className="text-black text-xl md:text-2xl lg:text-3xl font-semibold">
-              {post.price} €
-            </p>
-            <a
-              href="/produits"
-              className="bg-[#660024] text-white rounded-full px-4 py-2 text-lg"
-            >
-              Retour aux produits
-            </a>
-          </div>
-          <div>
-            <div className="flex justify-center items-center w-full mt-5">
-              <hr className="border-2 rounded-full w-12 border-[#660024]" />
-              <h3 className="text-[#660024] text-xl lg:text-4xl font-semibold p-3">
-                Description
-              </h3>
-              <hr className="border-2 rounded-full w-12 border-[#660024]" />
+        {loading ? (
+          <p
+            role="status"
+            aria-live="polite"
+            className="text-center text-white mt-6"
+          >
+            Chargement…
+          </p>
+        ) : error ? (
+          <p
+            role="alert"
+            aria-live="assertive"
+            className="text-center text-black text-xl mt-6"
+          >
+            {error}
+          </p>
+        ) : (
+          <div className=" mt-5 lg:w-1/2">
+            <div className="flex flex-col items-center gap-4">
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full px-[20%] sm:px-40 md:px-60 lg:px-40"
+                loading="lazy"
+              />
+              <h2 className="text-4xl font-semibold text-center text-[#660024]">
+                {post.title}
+              </h2>
+              <p className="text-black text-xl md:text-2xl lg:text-3xl font-semibold">
+                {post.price} €
+              </p>
+              <Link
+                to="/produits"
+                className="bg-[#660024] text-white rounded-full px-4 py-2 text-lg"
+              >
+                Retour aux produits
+              </Link>
             </div>
-            <p className="text-center text-sm lg:text-base mt-3">
-              {post.description}
-            </p>
+            <div>
+              <div className="flex justify-center items-center w-full mt-5">
+                <hr className="border-2 rounded-full w-12 border-[#660024]" />
+                <h3 className="text-[#660024] text-xl lg:text-4xl font-semibold p-3">
+                  Description
+                </h3>
+                <hr className="border-2 rounded-full w-12 border-[#660024]" />
+              </div>
+              <p className="text-center text-sm lg:text-base mt-3">
+                {post.description}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
+
         <ProductSimilary />
       </main>
       <Footer />

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="bg-[#2A2A2A] text-white py-8 px-4 sm:px-8 md:px-16 lg:px-48">
@@ -9,18 +11,18 @@ export default function Footer() {
         aria-label="Navigation footer"
         className="flex flex-col items-center gap-2 mb-4"
       >
-        <a
-          href="#home"
+        <Link
+          to="/"
           className="hover:underline focus:outline-none focus:ring-2 focus:ring-white/50 italic"
         >
           Acceuil
-        </a>
-        <a
-          href=""
+        </Link>
+        <Link
+          to="/produits"
           className="hover:underline focus:outline-none focus:ring-2 focus:ring-white/50 italic"
         >
           Produit
-        </a>
+        </Link>
       </nav>
 
       <hr className="border-white mb-2" />

@@ -37,9 +37,21 @@ export default function ProductContainer({ titre, limite }) {
       </h2>
 
       {loading ? (
-        <p className="text-center text-white mt-6">Chargement...</p>
+        <p
+          className="text-center text-white mt-6"
+          aria-live="polite"
+          role="status"
+        >
+          Chargement...
+        </p>
       ) : error ? (
-        <p className="text-center text-black text-xl mt-6">{error}</p>
+        <p
+          className="text-center text-black text-xl mt-6"
+          aria-live="assertive"
+          role="alert"
+        >
+          {error}
+        </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {(limite ? posts.slice(0, 6) : posts).map((post) => (

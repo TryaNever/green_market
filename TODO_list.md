@@ -1,6 +1,6 @@
 # Liste des étape a faire pour finir ce projet
 
-- Design
+- Design✅
   - Sitemap ✅
   - Style guide ✅
     - Colors Guide ✅
@@ -9,22 +9,21 @@
   - WireFrame ✅
   - Components ✅
   - Design ✅
-- Devellopement (A préciser)
+- Devellopement ✅
 
-  - Make Page
-  - LightHouse
-  - Loader + gestion erreurs
-  - Responsive (mobile first)
-  - Accessibilité (clavier, alt, ARIA)
-  - SEO (structure, meta)
+  - Make Page✅
+  - LightHouse✅
+  - Loader + gestion erreurs✅
+  - Responsive (mobile first)✅
+  - Accessibilité (clavier, alt, ARIA)✅
+  - SEO (structure, meta)✅
 
-- Performance & qualité
-  - Optimisation images
-  - Lazy loading
-  - Scores Lighthouse ≥ 80
-- Rendu final
-  - Déploiement Vercel
-  - README.md
-  - Lien Figma
-  - Rapport technique
-  - Vérification critères ECF
+- Performance & qualité✅
+  - Optimisation images✅
+  - Lazy loading✅
+  - Scores Lighthouse ≥ 80✅
+- Rendu final✅
+  - Déploiement Vercel✅
+  - README.md✅
+  - Lien Figma✅
+  - Rapport technique✅

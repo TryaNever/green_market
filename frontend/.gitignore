@@ -1,0 +1,37 @@
+# 📦 Dépendances
+
+node_modules/
+
+# ⚡ Build / production
+
+dist/assets/
+build/
+
+# 🧪 Logs
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 🧠 Cache
+
+.cache/
+.vite/
+*.local
+
+# 🗂️ Fichiers système
+
+.DS_Store
+Thumbs.db
+
+# 🔐 Variables d'environnement
+
+.env
+
+# 🧰 IDE / éditeurs
+
+.vscode/
+.idea/
+*.swp
+*.swo

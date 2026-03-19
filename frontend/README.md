@@ -46,7 +46,7 @@ API utilisée : [https://fakestoreapi.com](https://fakestoreapi.com)
 git clone git@github.com:TryaNever/green_market.git
 cd green_market
 npm install
-npm run dev
+npm run dev or docker compose up -d --build
 ```
 
 ---

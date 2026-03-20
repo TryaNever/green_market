@@ -6,22 +6,27 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
-final class ApiController extends AbstractController
+final class ProductController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $em)
-    {
+    public function __construct(
+        private EntityManagerInterface $em,
+        private SerializerInterface $serializer
+    ) {
     }
 
-    #[Route('/api', name: 'app_api', methods: ['GET'])]
+    #[Route('/product', name: 'app_product', methods: ['GET'])]
     public function index(): JsonResponse
     {
         $products = $this->em->getRepository(Product::class)->findAll();
 
+        $data = $this->serializer->normalize($products, null, ['groups' => 'product:read']);
+
         return $this->json([
             'success' => true,
             'message' => 'Produits récupérés avec succès',
-            'data' => $products,
+            'data' => $data,
             'errors' => null,
         ], 200);
     }

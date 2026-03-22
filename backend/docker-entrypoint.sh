@@ -12,6 +12,7 @@ until php -r "try {
 done
 
 php bin/console doctrine:migrations:migrate --no-interaction || true
+php bin/console doctrine:fixtures:load --no-interaction || true
 
 php bin/console cache:clear --env=dev || true
 php bin/console cache:warmup --env=dev || true

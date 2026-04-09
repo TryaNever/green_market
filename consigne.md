@@ -31,6 +31,7 @@ Créer une API back-end avec :
 - description
 - price (> 0)
 - stock (≥ 0)
+- picture
 - user_id (producteur)
 - created_at
 
@@ -57,18 +58,6 @@ Créer une API back-end avec :
 - 1 user → plusieurs produits
 - 1 user → plusieurs commandes
 - 1 commande → plusieurs lignes (order_items)
-
----
-
-## Données de test
-
-Créer :
-
-- 1 admin
-- 2 producer
-- 2 clients
-- quelques produits
-- 1 commande
 
 ---
 
@@ -149,7 +138,6 @@ README avec :
 - comment lancer le projet
 - routes API
 - sécurité
-- RGPD (données perso + protection)
 
 ---
 
@@ -159,4 +147,4 @@ README avec :
 - base de données (SQL)
 - données test
 - README
-- doc API (Postman)
+- doc API

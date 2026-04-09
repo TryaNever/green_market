@@ -36,8 +36,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
-RUN composer install --optimize-autoloader --no-scripts --no-interaction
-RUN rm -f .env.local.php
+RUN composer install --optimize-autoloader --no-scripts --no-interaction \
+    rm -f .env.local.php || true
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh

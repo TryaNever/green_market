@@ -2,18 +2,20 @@
 
 namespace App\Controller;
 
+use App\Enum\UserRole;
+use Doctrine\ORM\EntityManagerInterface;
 use Proxies\__CG__\App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class AuthController extends AbstractController
 {
     #[Route('/auth/register', name: 'green_market_register', methods: ['POST'])]
-    public function register(Request $request, ValidatorInterface $validator): JsonResponse
+    public function register(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): JsonResponse
     {
 
         $data = json_decode($request->getContent(), true);
@@ -26,12 +28,14 @@ final class AuthController extends AbstractController
                 'errors' => null,
             ], 400);
         }
+        $plainPassword = $data['password'];
 
         $user = new User();
         $user->setEmail($data['email']);
-        $user->setPassword($data['password']);
+        $user->setPassword($plainPassword);
         $user->setName($data['name']);
-        $user->setRoles(['ROLE_USER']);
+        $user->setRoles(UserRole::ROLE_USER);
+        $user->setCreatedAt(new \DateTimeImmutable());
 
         $error = $validator->validate($user);
         if (count($error) > 0) {
@@ -47,10 +51,16 @@ final class AuthController extends AbstractController
                 'errors' => $errors,
             ], 400);
         }
+        $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+        $user->setPassword($hashedPassword);
+
+        $em->persist($user);
+        $em->flush();
+
         return $this->json([
             'success' => true,
             'message' => 'Compte Créer avec succès',
-            'data' => null,
+            'data' => ["email" => "{$user->getEmail()}", "name" => "{$user->getName()}"],
             'errors' => null,
         ], 200);
     }

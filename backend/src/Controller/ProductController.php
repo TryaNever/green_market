@@ -16,7 +16,7 @@ final class ProductController extends AbstractController
     ) {
     }
 
-    #[Route('/product', name: 'app_product', methods: ['GET'])]
+    #[Route('/products', name: 'app_product', methods: ['GET'])]
     public function index(): JsonResponse
     {
         $products = $this->em->getRepository(Product::class)->findAll();
@@ -30,4 +30,20 @@ final class ProductController extends AbstractController
             'errors' => null,
         ], 200);
     }
+
+    #[Route('/products/{id}', name: 'app_product_show', methods: ['GET'])]
+    public function show(int $id): JsonResponse
+    {
+        $product = $this->em->getRepository(Product::class)->find($id);
+
+        $data = $this->serializer->normalize($product, null, ['groups' => 'product:read']);
+
+        return $this->json([
+            'success' => true,
+            'message' => 'Produit récupéré avec succès',
+            'data' => $data,
+            'errors' => null,
+        ], 200);
+    }
+
 }

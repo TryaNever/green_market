@@ -12,6 +12,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+#[Route('/api')]
 final class AuthController extends AbstractController
 {
     #[Route('/auth/register', name: 'green_market_register', methods: ['POST'])]
@@ -61,6 +62,17 @@ final class AuthController extends AbstractController
             'success' => true,
             'message' => 'Compte Créer avec succès',
             'data' => ["email" => "{$user->getEmail()}", "name" => "{$user->getName()}"],
+            'errors' => null,
+        ], 200);
+    }
+
+    #[Route('/auth/login', name: 'green_market_login', methods: ['POST'])]
+    public function login(): JsonResponse
+    {
+        return $this->json([
+            'success' => true,
+            'message' => 'Connexion réussie',
+            'data' => null,
             'errors' => null,
         ], 200);
     }

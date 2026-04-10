@@ -17,16 +17,17 @@ php bin/console doctrine:fixtures:load --no-interaction || true
 php bin/console cache:clear --env=dev || true
 php bin/console cache:warmup --env=dev || true
 
-# créer le .htaccess avec <IfModule mod_rewrite.c>
 cat > /var/www/html/public/.htaccess << 'EOF'
 DirectoryIndex index.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [QSA,L]
 </IfModule>
 EOF
 
-# démarrer apache
+# Lancer Apache en mode premier plan
 apache2-foreground

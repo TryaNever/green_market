@@ -6,6 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -17,19 +18,22 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product:read'])]
+    #[Assert\NotBlank(message: 'Le nom est requis')]
+    #[Assert\Length(max: 255)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product:read'])]
+    #[Assert\NotBlank(message: 'La description est requise')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    #[Groups(['product:read'])]
+    #[Assert\NotBlank(message: 'Le prix est requis')]
+    #[Assert\Positive(message: 'Le prix doit être positif')]
     private ?string $unitPrice = null;
 
     #[ORM\Column]
-    #[Groups(['product:read'])]
+    #[Assert\NotNull(message: 'Le stock est requis')]
+    #[Assert\PositiveOrZero(message: 'Le stock ne peut pas être négatif')]
     private ?int $stock = null;
 
     #[ORM\ManyToOne]

@@ -65,4 +65,16 @@ class OrderRepository extends ServiceEntityRepository
 
         return $this;
     }
+
+    public function findAllWithItem(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.orderItems', 'oi')
+            ->addSelect('oi')
+            ->leftJoin('oi.product', 'p')
+            ->addSelect('p')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

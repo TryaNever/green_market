@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[Groups(['order:read'])]
 class Product
 {
     #[ORM\Id]
@@ -24,6 +25,7 @@ class Product
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'La description est requise')]
+
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]

@@ -28,7 +28,7 @@ final class OrderController extends AbstractController
     public function index(): JsonResponse
     {
         try {
-            $orders = $this->em->getRepository(Order::class)->findAll();
+            $orders = $this->em->getRepository(Order::class)->findAllWithItem();
 
             if (empty($orders)) {
                 return $this->json([

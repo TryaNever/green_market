@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 
@@ -16,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Order
 {
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['order:read'])]
     private Collection $orderItems;
 
     public function __construct()
@@ -30,15 +32,19 @@ class Order
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['order:read'])]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['order:read'])]
     private ?string $totalPrice = null;
 
     #[ORM\Column(length: 50, enumType: OrderStatus::class)]
+    #[Groups(['order:read'])]
     private ?OrderStatus $status = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['order:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int

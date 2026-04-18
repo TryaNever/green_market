@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Order;
+use App\Entity\OrderItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,7 +17,7 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
-//    /**
+    //    /**
 //     * @return Order[] Returns an array of Order objects
 //     */
 //    public function findByExampleField($value): array
@@ -31,7 +32,7 @@ class OrderRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Order
+    //    public function findOneBySomeField($value): ?Order
 //    {
 //        return $this->createQueryBuilder('o')
 //            ->andWhere('o.exampleField = :val')
@@ -40,4 +41,28 @@ class OrderRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findWithItems(int $id): ?Order
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.orderItems', 'oi')
+            ->addSelect('oi')
+            ->leftJoin('oi.product', 'p')
+            ->addSelect('p')
+            ->where('o.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function removeOrderItem(OrderItem $orderItem): static
+    {
+        if ($this->orderItems->removeElement($orderItem)) {
+            if ($orderItem->getOrder() === $this) {
+                $orderItem->setOrder(null);
+            }
+        }
+
+        return $this;
+    }
 }

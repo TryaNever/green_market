@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Enum\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
-use Proxies\__CG__\App\Entity\User;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,26 +18,38 @@ final class AuthController extends AbstractController
     #[Route('/auth/register', name: 'green_market_register', methods: ['POST'])]
     public function register(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): JsonResponse
     {
-
+        // recupe data post
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['email']) || !isset($data['password']) || !isset($data['name'])) {
+        // verif no data missing
+        if (!isset($data['email']) || !isset($data['password']) || !isset($data['firstName']) || !isset($data['lastName'])) {
             return $this->json([
-                'success' => false,
-                'message' => 'Les champs email, password et name sont requis',
-                'data' => null,
-                'errors' => null,
+                'message' => 'Les champs email, password, firstName et LastName sont requis',
             ], 400);
         }
         $plainPassword = $data['password'];
+        $role = $data['role'] ?? UserRole::ROLE_USER;
+
+
+        //def role user
+        try {
+            $roleEnum = UserRole::from($role);
+        } catch (\ValueError $e) {
+            $roleEnum = UserRole::ROLE_USER;
+        }
 
         $user = new User();
+
+
         $user->setEmail($data['email']);
         $user->setPassword($plainPassword);
-        $user->setName($data['name']);
-        $user->setRoles(UserRole::ROLE_USER);
+        $user->setLastName($data["lastName"]);
+        $user->setfirstName($data["firstName"]);
+        $user->setRoles($roleEnum);
+
         $user->setCreatedAt(new \DateTimeImmutable());
 
+        //verif valide data
         $error = $validator->validate($user);
         if (count($error) > 0) {
             $errors = [];
@@ -46,9 +58,7 @@ final class AuthController extends AbstractController
             }
 
             return $this->json([
-                'success' => false,
                 'message' => 'Erreur de validation',
-                'data' => null,
                 'errors' => $errors,
             ], 400);
         }
@@ -59,10 +69,8 @@ final class AuthController extends AbstractController
         $em->flush();
 
         return $this->json([
-            'success' => true,
             'message' => 'Compte Créer avec succès',
-            'data' => ["email" => "{$user->getEmail()}", "name" => "{$user->getName()}"],
-            'errors' => null,
+            'data' => $em->getRepository(User::class)->find($user->getId())
         ], 200);
     }
 
@@ -70,10 +78,8 @@ final class AuthController extends AbstractController
     public function login(): JsonResponse
     {
         return $this->json([
-            'success' => true,
             'message' => 'Connexion réussie',
             'data' => null,
-            'errors' => null,
         ], 200);
     }
 }

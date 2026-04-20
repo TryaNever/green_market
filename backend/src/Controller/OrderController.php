@@ -12,7 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route("/api")]
@@ -24,7 +23,7 @@ final class OrderController extends AbstractController
         private SerializerInterface $serializer
     ) {
     }
-    #[Route('/order', name: 'app_order', methods: ['GET'])]
+    #[Route('/orders', name: 'app_order', methods: ['GET'])]
     public function index(): JsonResponse
     {
         try {
@@ -32,43 +31,33 @@ final class OrderController extends AbstractController
 
             if (empty($orders)) {
                 return $this->json([
-                    'success' => false,
                     'message' => 'Aucune commande trouvé',
-                    'data' => null,
-                    'errors' => null,
                 ], 404);
             }
 
             $data = $this->serializer->normalize($orders, null, ['groups' => 'order:read']);
 
             return $this->json([
-                'success' => true,
                 'message' => 'Produits récupérés avec succès',
                 'data' => $data,
-                'errors' => null,
             ], 200);
 
         } catch (\Exception $e) {
             return $this->json([
-                'success' => false,
                 'message' => 'Une erreur est survenue lors de la récupération des produits',
-                'data' => null,
                 'errors' => [$e->getMessage()],
             ], 500);
         }
     }
 
 
-    #[Route('/order/{id}', name: 'app_order_show', methods: ['GET'])]
+    #[Route('/orders/{id}', name: 'app_order_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
         try {
             if ($id <= 0) {
                 return $this->json([
-                    'success' => false,
                     'message' => 'L\'identifiant du produit est invalide',
-                    'data' => null,
-                    'errors' => null,
                 ], 400);
             }
 
@@ -76,10 +65,7 @@ final class OrderController extends AbstractController
 
             if (!$orders) {
                 return $this->json([
-                    'success' => false,
                     'message' => "Aucune commandes trouvé avec l'id {$id}",
-                    'data' => null,
-                    'errors' => null,
                 ], 404);
             }
 
@@ -88,10 +74,7 @@ final class OrderController extends AbstractController
                 (!$this->isGranted('ROLE_USER') || $orders->getUser() !== $this->getUser())
             ) {
                 return $this->json([
-                    'success' => false,
                     'message' => 'Accès refusé',
-                    'data' => null,
-                    'errors' => null,
                 ], 403);
             }
 
@@ -99,17 +82,13 @@ final class OrderController extends AbstractController
             $data = $this->serializer->normalize($orders, null, ['groups' => 'order:read']);
 
             return $this->json([
-                'success' => true,
                 'message' => 'Produit récupéré avec succès',
                 'data' => $data,
-                'errors' => null,
             ], 200);
 
         } catch (\Exception $e) {
             return $this->json([
-                'success' => false,
                 'message' => 'Une erreur est survenue lors de la récupération du produit',
-                'data' => null,
                 'errors' => [$e->getMessage()],
             ], 500);
         }
@@ -117,26 +96,24 @@ final class OrderController extends AbstractController
 
     }
 
-    #[Route('/order', name: 'app_order_create', methods: ['POST'])]
+    #[Route('/orders', name: 'app_order_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!$data || !isset($data['userId'], $data['items'])) {
+        if (!$data || $data['items']) {
             return $this->json([
-                'success' => false,
-                'message' => 'Invalid payload',
+                'message' => 'Mauvaise donnée récu',
             ], 400);
         }
 
         // Verif exist user
 
-        $user = $this->em->getRepository(User::class)->find($data['userId']);
+        $user = $this->getUser();
 
         if (!$user) {
             return $this->json([
-                'success' => false,
-                'message' => 'User not found',
+                'message' => 'Utilisateur introuvable',
             ], 404);
         }
 
@@ -155,8 +132,7 @@ final class OrderController extends AbstractController
 
             if (!isset($value['productId'], $value['quantity'])) {
                 return $this->json([
-                    'success' => false,
-                    'message' => 'Invalid item format',
+                    'message' => 'mauvaise donnée reçu',
                 ], 400);
             }
 
@@ -166,8 +142,7 @@ final class OrderController extends AbstractController
 
             if (!$product) {
                 return $this->json([
-                    'success' => false,
-                    'message' => 'Product not found',
+                    'message' => 'produit inexistant',
                 ], 404);
             }
 
@@ -175,8 +150,7 @@ final class OrderController extends AbstractController
 
             if ($qty <= 0) {
                 return $this->json([
-                    'success' => false,
-                    'message' => 'Invalid quantity',
+                    'message' => 'mauvaise quantité',
                 ], 400);
             }
 
@@ -200,15 +174,19 @@ final class OrderController extends AbstractController
             $this->em->flush();
         } catch (\Throwable $e) {
             return $this->json([
-                'success' => false,
-                'message' => 'Error while saving order',
+                'message' => "Error pendant l'enregistremant de la commande",
             ], 500);
         }
 
         return $this->json([
-            'success' => true,
-            'message' => 'Order created',
-            'data' => $product = $this->em->getRepository(Order::class)->find($order->getId()),
+            'id' => $order->getId(),
+            'user_id' => $order->getUser()->getId(),
+            'date' => $order->getCreatedAt()->format('Y-m-d'),
+            'products' => array_map(fn($item) => [
+                'product_id' => $item->getProduct()->getId(),
+                'quantity' => $item->getQuantity(),
+            ], $order->getOrderItems()->toArray()),
+            'total' => (float) $order->getTotalPrice()
         ], 201);
     }
 

@@ -20,7 +20,11 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[ORM\Column(length: 255)]
     #[Groups(['product:read', 'user:read'])]
-    private ?string $name = null;
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['product:read', 'user:read'])]
+    private ?string $lastName = null;
 
     #[ORM\Column(length: 254)]
     #[Groups(['user:read'])]
@@ -36,13 +40,13 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    // ✅ 1. Requis par UserInterface — retourne l'identifiant unique (email ici)
+    // Requis par UserInterface — retourne l'identifiant unique (email ici)
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    // ✅ 2. Requis par UserInterface — doit retourner un array de strings
+    // Requis par UserInterface — doit retourner un array de strings
     public function getRoles(): array
     {
         return [$this->roles?->value ?? 'ROLE_USER'];
@@ -68,11 +72,16 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->firstName + $this->lastName;
     }
-    public function setName(string $name): static
+    public function setFirstName(string $firstName): static
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
+        return $this;
+    }
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
         return $this;
     }
 

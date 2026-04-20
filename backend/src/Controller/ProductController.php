@@ -36,6 +36,7 @@ final class ProductController extends AbstractController
                 ], 404);
             }
 
+            // group set dans entity
             $data = $this->serializer->normalize($products, null, ['groups' => 'product:read']);
 
             return $this->json([
@@ -99,6 +100,7 @@ final class ProductController extends AbstractController
     }
 
     #[Route('/products', name: 'app_product_create', methods: ['POST'])]
+    // check access user admin or producer
     #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_PRODUCER")'))]
     public function create(Request $request, ValidatorInterface $validator): JsonResponse
     {
@@ -172,7 +174,7 @@ final class ProductController extends AbstractController
                 ], 404);
             }
 
-            if (
+            if ( // verif role if admin or belong producer
                 !$this->isGranted('ROLE_ADMIN') &&
                 (!$this->isGranted('ROLE_PRODUCER') || $product->getSeller() !== $this->getUser())
             ) {

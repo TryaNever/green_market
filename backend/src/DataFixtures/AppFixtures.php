@@ -7,16 +7,28 @@ use App\Entity\User;
 use App\Enum\UserRole;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
+        $users = [];
         for ($i = 0; $i < 20; $i++) {
             $user = new User();
-            $user->setName('user ' . $i);
+            $user->setFirstName('user ' . $i);
+            $user->setLastName('user ' . $i);
             $user->setEmail('user' . $i . '@example.com');
-            $user->setPassword('password' . $i);
+            $hashedPassword = $this->passwordHasher->hashPassword($user, 'password' . $i);
+
+            $user->setPassword($hashedPassword);
             $user->setRoles($i > 10 ? UserRole::ROLE_USER : UserRole::ROLE_PRODUCER);
             $user->setCreatedAt(new \DateTimeImmutable());
             $manager->persist($user);

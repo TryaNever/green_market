@@ -55,17 +55,6 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function removeOrderItem(OrderItem $orderItem): static
-    {
-        if ($this->orderItems->removeElement($orderItem)) {
-            if ($orderItem->getOrder() === $this) {
-                $orderItem->setOrder(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function findAllWithItem(): array
     {
         return $this->createQueryBuilder('o')

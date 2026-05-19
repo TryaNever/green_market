@@ -8,7 +8,7 @@ Rendu le 9 janvier 2026, soutenance le 15 janvier 2026.
 
 ## 🎨 Maquette Figma
 
-Lien [Design](https://www.figma.com/design/r6dSOErFwfR2Jn8Djh5cGn/Green-Market)
+Lien [Design](https://www.figma.com/*design*/r6dSOErFwfR2Jn8Djh5cGn/Green-Market)
 
 ---
 

@@ -5,11 +5,19 @@ FROM php:8.3-fpm-alpine AS builder
 RUN apk add --no-cache \
     git unzip zip curl bash \
     icu-dev icu-libs \
-    oniguruma-dev libzip-dev
+    oniguruma-dev libzip-dev \
+    $PHPIZE_DEPS
 
 # extensions PHP
 RUN docker-php-ext-install \
     pdo pdo_mysql opcache intl zip
+
+# APCu
+RUN pecl install apcu \
+    && docker-php-ext-enable apcu
+
+# active APCu en CLI
+RUN echo "apc.enable_cli=1" > /usr/local/etc/php/conf.d/apcu.ini
 
 # copie composer depuis son image officielle
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -32,11 +40,21 @@ FROM php:8.3-fpm-alpine
 RUN apk add --no-cache \
     icu-dev icu-libs \
     oniguruma-dev \
-    libzip-dev
+    libzip-dev \
+    $PHPIZE_DEPS
 
 # extensions PHP
 RUN docker-php-ext-install \
     pdo pdo_mysql opcache intl zip
+
+# APCu
+RUN pecl install apcu \
+    && docker-php-ext-enable apcu
+
+# active APCu en CLI
+RUN echo "apc.enable_cli=1" > /usr/local/etc/php/conf.d/apcu.ini
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # config opcache + fpm
 COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini

@@ -27,8 +27,8 @@ jobs:
           file: ./docker/php/Dockerfile
           push: true
           tags: |
-            tryanever/green_market:backend-latest
-            tryanever/green_market:backend-${{ github.sha }}
+            tryanever/green_market-backend:latest
+            tryanever/green_market-backend:${{ github.sha }}
   frontend-deployment:
     runs-on: ubuntu-latest
 
@@ -52,5 +52,5 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: |
-            tryanever/green_market:frontend-latest
-            tryanever/green_market:frontend-${{ github.sha }}
+            tryanever/green_market-frontend:latest
+            tryanever/green_market-frontend:${{ github.sha }}

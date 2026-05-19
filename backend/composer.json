@@ -1,4 +1,6 @@
 {
+    "name": "green-market/back",
+    "description": "Application Symfony backend",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",

@@ -38,9 +38,9 @@ lint-docker%:
 	@echo "exec lint test: $*"
 	@docker compose exec -T $* npm run lint
 
-lint-%:
-	@echo "exec lint test: $*"
-	@cd $* && npm run lint
+lint:
+	@echo "exec lint test frontend"
+	@cd frontend && npm run lint
 
 phpstan-backend:
 	@echo "run backend test code"

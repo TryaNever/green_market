@@ -22,8 +22,8 @@ jobs:
       - name: Build and push backend image
         uses: docker/build-push-action@v6
         with:
-          context: ./backend
-          file: ../docker/php/Dockerfile
+          context: .
+          file: ./docker/php/Dockerfile
           push: true
           tags: |
             tryanever/ci_cd-lab:backend-latest

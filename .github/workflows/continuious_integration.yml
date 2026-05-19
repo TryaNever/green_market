@@ -38,7 +38,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: backend
-        run: composer install --prefer-dist --no-progress --no-interaction
+        run: composer install --prefer-dist --no-progress --no-interaction --ignore-platform-req=ext-redis
 
       - name: Run PHP CS Fixer
         working-directory: backend

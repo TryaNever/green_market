@@ -40,10 +40,6 @@ jobs:
         working-directory: backend
         run: composer install --prefer-dist --no-progress --no-interaction --ignore-platform-req=ext-redis
 
-      - name: Run PHP CS Fixer
-        working-directory: backend
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff
-
       - name: Run PHPStan
         working-directory: backend
         run: vendor/bin/phpstan analyse

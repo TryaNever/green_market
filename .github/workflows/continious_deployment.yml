@@ -23,7 +23,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
-          file: ../docker/php/Dockerfile
+          file: ./docker/php/Dockerfile
           push: true
           tags: |
             tryanever/ci_cd-lab:backend-latest

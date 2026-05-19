@@ -32,12 +32,18 @@ jobs:
           php-version: "8.3"
           extensions: mbstring, intl, pdo, pdo_mysql
           coverage: none
-
       - name: Validate composer.json and composer.lock
+        working-directory: backend
         run: composer validate --strict
 
       - name: Install dependencies
+        working-directory: backend
         run: composer install --prefer-dist --no-progress --no-interaction
 
+      - name: Run PHP CS Fixer
+        working-directory: backend
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
       - name: Run PHPStan
-        run: make phpstan-backend
+        working-directory: backend
+        run: vendor/bin/phpstan analyse

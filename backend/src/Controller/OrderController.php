@@ -4,6 +4,7 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\Product;
 use App\Enum\OrderStatus;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,14 +18,16 @@ final class OrderController extends AbstractController
 
     public function __construct(
         private EntityManagerInterface $em,
-        private SerializerInterface $serializer
+        private SerializerInterface $serializer,
+        private OrderRepository $orderRepository
     ) {
     }
     #[Route('/orders', name: 'app_order', methods: ['GET'])]
     public function index(): JsonResponse
     {
         try {
-            $orders = $this->em->getRepository(Order::class)->findAllWithItem();
+            $orders = $this->orderRepository->findAllWithItem();
+
 
             if (empty($orders)) {
                 return $this->json([
@@ -32,7 +35,7 @@ final class OrderController extends AbstractController
                 ], 404);
             }
 
-            $data = $this->serializer->normalize($orders, null, ['groups' => 'order:read']);
+            $data = $this->serializer->serialize($orders, "json", ['groups' => 'order:read']);
 
             return $this->json([
                 'message' => 'Produits récupérés avec succès',
@@ -58,7 +61,7 @@ final class OrderController extends AbstractController
                 ], 400);
             }
 
-            $orders = $this->em->getRepository(Order::class)->findWithItems($id);
+            $orders = $this->orderRepository->findWithItems($id);
 
             if (!$orders) {
                 return $this->json([
@@ -76,7 +79,7 @@ final class OrderController extends AbstractController
             }
 
 
-            $data = $this->serializer->normalize($orders, null, ['groups' => 'order:read']);
+            $data = $this->serializer->serialize($orders, "json", ['groups' => 'order:read']);
 
             return $this->json([
                 'message' => 'Produit récupéré avec succès',

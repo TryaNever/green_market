@@ -70,10 +70,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
-        return $this->firstName + $this->lastName;
-    }
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
@@ -83,6 +79,16 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     {
         $this->lastName = $lastName;
         return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
     }
 
     public function getEmail(): ?string

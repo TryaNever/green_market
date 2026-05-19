@@ -37,7 +37,7 @@ final class ProductController extends AbstractController
             }
 
             // group set dans entity
-            $data = $this->serializer->normalize($products, null, ['groups' => 'product:read']);
+            $data = $this->serializer->serialize($products, "json", ['groups' => 'product:read']);
 
             return $this->json([
                 'success' => true,
@@ -80,7 +80,7 @@ final class ProductController extends AbstractController
                 ], 404);
             }
 
-            $data = $this->serializer->normalize($product, null, ['groups' => 'product:read']);
+            $data = $this->serializer->serialize($product, "json", ['groups' => 'product:read']);
 
             return $this->json([
                 'success' => true,
@@ -136,7 +136,7 @@ final class ProductController extends AbstractController
             return $this->json([
                 'success' => true,
                 'message' => 'Produit créé avec succès',
-                'data' => $this->serializer->normalize($product, null, ['groups' => 'product:read']),
+                'data' => $this->serializer->serialize($product, "json", ['groups' => 'product:read']),
                 'errors' => null,
             ], 201);
 

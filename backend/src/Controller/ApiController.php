@@ -13,7 +13,7 @@ final class ApiController extends AbstractController
     {
     }
 
-    #[Route('/api', name: 'app_api', methods: ['GET'])]
+    #[Route('/api/doc', name: 'app_api', methods: ['GET'])]
     public function index(): JsonResponse
     {
         $products = $this->em->getRepository(Product::class)->findAll();

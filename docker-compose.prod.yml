@@ -9,8 +9,7 @@ services:
       VITE_API_URL: ${VITE_API_URL}
 
   backend:
-    build:
-      dockerfile: ./docker/php/Dockerfile.prod
+    image: tryanever/green_market-backend:latest
     container_name: php
     restart: unless-stopped
     environment:

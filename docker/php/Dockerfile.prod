@@ -28,7 +28,7 @@ WORKDIR /var/www/html
 COPY backend/composer.json backend/composer.lock ./
 
 # install deps sans scripts ni dev
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN composer install --no-dev --optimize-autoloader --classmap-authoritative --no-interaction --no-scripts
 
 # copie code source
 COPY backend .

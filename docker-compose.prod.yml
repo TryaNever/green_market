@@ -10,7 +10,6 @@ services:
 
   backend:
     build:
-      context: .
       dockerfile: ./docker/php/Dockerfile.prod
     container_name: php
     restart: unless-stopped

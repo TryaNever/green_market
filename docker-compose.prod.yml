@@ -12,6 +12,7 @@ services:
     image: tryanever/green_market-backend:latest
     container_name: php
     restart: unless-stopped
+    dockerfile: ./docker/php/Dockerfile.prod
     volumes:
       - symfony_var:/var/www/html/var
     environment:

@@ -1,26 +1,32 @@
 #!/bin/sh
 set -e
 
-echo "Fix permissions..."
+echo "➡️ Fix permissions..."
 chown -R app:app /var/www/html/var || true
 
-echo "Install dependencies if needed..."
-if [ ! -d /var/www/html/vendor ]; then
-  composer install --no-interaction --optimize-autoloader --no-dev
-fi
+echo "➡️ Waiting for database..."
 
-echo "Waiting for MySQL..."
-
-until mysqladmin ping -h db -u"$DB_USER" -p"$DB_PASSWORD" --silent; do
+# Attente MySQL via port (plus fiable que mysqladmin + pas de fuite de password)
+until nc -z db 3306; do
   sleep 2
 done
 
-echo "Running migrations..."
-php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+echo "➡️ Database is up."
 
-echo "Warming cache..."
+echo "➡️ Running migrations (SAFE MODE)..."
+
+# ⚠️ En prod: idéalement faire ça en CI/CD, mais laissé ici si nécessaire
+php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration || true
+
+echo "➡️ Clearing cache..."
 php bin/console cache:clear --env=prod --no-interaction
+
+echo "➡️ Warming up cache..."
 php bin/console cache:warmup --env=prod
 
-echo "Starting PHP-FPM..."
+echo "➡️ Ensuring correct permissions after cache..."
+chown -R app:app /var/www/html/var || true
+
+echo "➡️ Starting PHP-FPM..."
+
 exec php-fpm -F

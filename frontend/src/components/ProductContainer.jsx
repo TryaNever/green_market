@@ -9,7 +9,7 @@ export default function ProductContainer({ titre, limite }) {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch("https://fakestoreapi.com/products");
+        const response = await fetch("http://178.105.30.203:9000/products");
         if (!response.ok)
           throw new Error("Erreur lors du chargement des produits");
         const res = await response.json();

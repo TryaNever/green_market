@@ -12,7 +12,7 @@ services:
     image: tryanever/green_market-backend:latest
     container_name: php
     ports:
-      - "80:80"
+      - "9000:9000"
     restart: unless-stopped
     environment:
       APP_ENV: prod

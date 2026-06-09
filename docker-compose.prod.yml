@@ -2,15 +2,15 @@ services:
   frontend:
     image: tryanever/green_market-frontend:latest
     container_name: frontend
-    expose:
-      - "5173"
+    ports:
+      - "5173:5173"
     restart: unless-stopped
 
   php:
     image: tryanever/green_market-backend:latest
     container_name: php
-    expose:
-      - "9000"
+    ports:
+      - "9000:9000"
     restart: unless-stopped
 
   db:

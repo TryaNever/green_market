@@ -1,11 +1,9 @@
 services:
   frontend:
     image: tryanever/green_market-frontend:latest
-    container_name: green_market_frontend
-    ports:
-      - "5173:5173"
-    environment:
-      VITE_API_URL: ${VITE_API_URL}
+    container_name: frontend
+    expose:
+      - "5173"
     restart: unless-stopped
 
   php:
@@ -13,49 +11,25 @@ services:
     container_name: php
     expose:
       - "9000"
-    environment:
-      APP_ENV: prod
-    volumes:
-      - symfony_var:/var/www/html/var
-    depends_on:
-      - db
-    restart: unless-stopped
-
-  backend_nginx:
-    image: nginx:alpine
-    container_name: backend_nginx
-    ports:
-      - "9000:80"
-    depends_on:
-      - php
     restart: unless-stopped
 
   db:
     image: mysql:8.0
-    container_name: symfony_db
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin:latest
-    container_name: phpmyadmin
-    restart: unless-stopped
     ports:
       - "8080:80"
     environment:
       PMA_HOST: db
-      PMA_PORT: 3306
-    depends_on:
-      - db
 
 volumes:
   db_data:
-  symfony_var:

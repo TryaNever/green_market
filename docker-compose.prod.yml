@@ -10,7 +10,7 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/php/Dockerfile.prod
     container_name: php
     ports:
       - "9000:9000"

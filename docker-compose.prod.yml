@@ -10,7 +10,7 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/php/Dockerfile.prod
     container_name: php
     expose:
       - "9000"
